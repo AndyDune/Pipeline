@@ -19,13 +19,19 @@ class PipelineTest extends TestCase
     /**
      * @return void
      */
-    public function testEmptyPipeline()
+    public function testSimplePipeline()
     {
         $pipeline = new Pipeline();
-        $result = $pipeline->then(function () {
-            return 12;
+        $pipeline->send(1);
+        $pipeline->pipe(function ($context, $next) {
+            $context += 100;
+            return $next($context);
         });
-        $this->assertEquals(12, $result);
+        $result = $pipeline->then(function ($context) {
+            $context += 50;
+            return $context;
+        });
+        $this->assertEquals(151, $result);
     }
 
 }
