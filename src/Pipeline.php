@@ -9,7 +9,7 @@
  *
  */
 
-namespace AndyDune;
+namespace AndyDune\Pipeline;
 use Closure;
 use Interop\Container\ContainerInterface;
 

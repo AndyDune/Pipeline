@@ -11,7 +11,7 @@
 
 
 namespace AndyDuneTest;
-use AndyDune\Pipeline;
+use AndyDune\Pipeline\Pipeline;
 use PHPUnit\Framework\TestCase;
 
 class PipelineTest extends TestCase

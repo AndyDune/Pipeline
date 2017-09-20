@@ -9,7 +9,7 @@
     "homepage": "https://github.com/AndyDune/Pipeline",
     "autoload": {
         "psr-4": {
-            "AndyDune\\": "src/"
+            "AndyDune\\Pipeline\\": "src/"
         }
     },
     "require": {

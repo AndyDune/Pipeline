@@ -10,7 +10,7 @@
  */
 
 
-namespace AndyDune;
+namespace AndyDune\Pipeline;
 use Exception as ExceptionBase;
 
 class Exception extends ExceptionBase
