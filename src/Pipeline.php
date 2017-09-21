@@ -116,6 +116,21 @@ class Pipeline
         return $pipeline($this->passable);
     }
 
+
+    /**
+     * Run the pipeline without a final destination callback.
+     *
+     * @return mixed
+     */
+    public function execute()
+    {
+        $pipeline = array_reduce(
+            array_reverse($this->pipes), $this->carry(), function($passable){ return $passable; }
+        );
+
+        return $pipeline($this->passable);
+    }
+
     /**
      * Get the final piece of the Closure onion.
      *

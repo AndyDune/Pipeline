@@ -34,6 +34,24 @@ class PipelineTest extends TestCase
         $this->assertEquals(151, $result);
     }
 
+    /**
+     * @return void
+     */
+    public function testNoFinalCallback()
+    {
+
+        $pipeline = new Pipeline();
+        $pipeline->send(1);
+        $pipeline->pipe(function ($context, $next) {
+            $context += 100;
+            return $next($context);
+        });
+        $result = $pipeline->execute();
+        $this->assertEquals(101, $result);
+
+    }
+
+
     public function testMethodThrough()
     {
         $pipeline = new Pipeline();
