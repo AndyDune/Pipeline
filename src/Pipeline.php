@@ -37,12 +37,22 @@ class Pipeline
      */
     protected $method = null;
 
+    /**
+     * @var ContainerInterface|null
+     */
+    protected $container = null;
 
-    public function __construct()
+
+    /**
+     * Create a new class instance.
+     *
+     * @param  ContainerInterface|null  $container
+     * @return void
+     */
+    public function __construct(ContainerInterface $container = null)
     {
-
+        $this->container = $container;
     }
-
     /**
      * Set the object being sent through the pipeline.
      *
@@ -140,12 +150,19 @@ class Pipeline
                     // since the object we're given was already a fully instantiated object.
                     $parameters = [$passable, $stack];
                 } else {
-                    list($name, $method, $parameters) = $this->parsePipeString($pipe);
+                    list($name, $methodFromString, $parameters) = $this->parsePipeString($pipe);
+                    if($methodFromString) {
+                        $method = $methodFromString;
+                    }
+
+                    if (! $parameters) {
+                        $parameters = [];
+                    }
 
                     // If the pipe is a string we will parse the string and resolve the class out
                     // of the dependency injection container. We can then build a callable and
                     // execute the pipe function giving in the parameters that are required.
-                    $pipe = $this->getServiceLocator()->get($name);
+                    $pipe = $this->getContainer()->get($name);
 
                     $parameters = array_merge([$passable, $stack], $parameters);
                 }
@@ -184,10 +201,10 @@ class Pipeline
      * @return ContainerInterface
      * @throws \RuntimeException
      */
-    protected function getServiceLocator()
+    protected function getContainer()
     {
         if (! $this->container) {
-            throw new Exception('A container instance has not been passed to the Pipeline.');
+            $this->container = new PipeIsClassName();
         }
 
         return $this->container;

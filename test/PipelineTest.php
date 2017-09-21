@@ -34,4 +34,28 @@ class PipelineTest extends TestCase
         $this->assertEquals(151, $result);
     }
 
+
+    /**
+     * @return void
+     */
+    public function testPipeIsClassName()
+    {
+        $pipeline = new Pipeline();
+        $pipeline->send(' 123 ');
+        $pipeline->pipe('AndyDune\Pipeline\Example\Trim');
+        $result = $pipeline->then(function ($context) {
+            return $context;
+        });
+        $this->assertEquals(3, strlen($result));
+
+        $pipeline = new Pipeline();
+        $pipeline->send(' 123 ');
+        $pipeline->pipe('AndyDune\Pipeline\Example\Trim:handle:1 ');
+        $result = $pipeline->then(function ($context) {
+            return $context;
+        });
+        $this->assertEquals('23', $result);
+
+    }
+
 }
