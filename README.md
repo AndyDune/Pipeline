@@ -8,6 +8,30 @@
 
 This package provides a pipeline pattern implementation. It base on middleware approach.
 
+Installation
+------------
+
+Installation using composer:
+
+```
+composer require andydune/pipeline 
+```
+Or if composer doesn't install globa:
+```
+php composer.phar require andydune/pipeline
+```
+Or edit your `composer.json`:
+```
+"require" : {
+     "andydune/pipeline": "^0.6"
+}
+
+```
+And execute command:
+```
+php composer.phar update
+```
+
 
 ## Usage
 
