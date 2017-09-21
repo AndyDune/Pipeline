@@ -1,9 +1,10 @@
 {
     "name": "andydune/pipeline",
-    "description": "provides a pipeline patter",
+    "description": "Provides a pipeline pattern. Based on middleware approach.",
     "license": "MIT",
     "keywords": [
         "php",
+        "middleware",
         "pipeline pattern"
     ],
     "homepage": "https://github.com/AndyDune/Pipeline",
@@ -26,8 +27,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.9-dev",
-            "dev-develop": "2.10-dev"
+            "dev-master": "0.6-dev",
+            "dev-develop": "0.6-dev"
         }
     },
     "autoload-dev": {
