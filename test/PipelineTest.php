@@ -34,6 +34,26 @@ class PipelineTest extends TestCase
         $this->assertEquals(151, $result);
     }
 
+    public function testMethodThrough()
+    {
+        $pipeline = new Pipeline();
+
+        $stages = [
+            function($contest, $next) {
+                $contest += 100;
+                return $next($contest);
+            },
+            function($contest, $next) {
+                $contest += 10;
+                return $next($contest);
+            }
+        ];
+        $result = $pipeline->through($stages)->send(1)
+            ->then(function ($context) {
+                $context += 1000;
+                return $context;});
+        $this->assertEquals(1111, $result);
+    }
 
     /**
      * @return void
