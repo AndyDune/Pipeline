@@ -13,6 +13,9 @@
 namespace AndyDuneTest;
 use AndyDune\Pipeline\Pipeline;
 use PHPUnit\Framework\TestCase;
+use AndyDune\Pipeline\Example\Trim;
+use Exception;
+use ArrayObject;
 
 class PipelineTest extends TestCase
 {
@@ -80,7 +83,7 @@ class PipelineTest extends TestCase
     {
         $pipeline = new Pipeline();
         $pipeline->send(' 123 ');
-        $pipeline->pipe('AndyDune\Pipeline\Example\Trim');
+        $pipeline->pipe(Trim::class);
         $result = $pipeline->then(function ($context) {
             return $context;
         });
@@ -88,11 +91,71 @@ class PipelineTest extends TestCase
 
         $pipeline = new Pipeline();
         $pipeline->send(' 123 ');
-        $pipeline->pipe('AndyDune\Pipeline\Example\Trim:handle:1 ');
+        $pipeline->pipe(Trim::class . ':handle:1 ');
         $result = $pipeline->then(function ($context) {
             return $context;
         });
         $this->assertEquals('23', $result);
+
+    }
+
+    /**
+     * @return void
+     */
+    public function testExceptionCatch()
+    {
+        $pipeline = new Pipeline();
+        $pipeline->send(['zub' => 'kovoy']);
+        $pipeline->pipe(function ($context, $next) {
+            try {
+                return $next($context);
+            } catch (Exception $e) {
+                $context['exception'] = 'caught';
+            }
+            return $context;
+        });
+
+        $pipeline->pipe(function ($context, $next) {
+            $context['action'] = 'before_exception';
+            throw new Exception();
+            return $next($context);
+        });
+
+        $pipeline->pipe(function ($context, $next) {
+            $context['exception'] = 'ignored';
+            return $next($context);
+        });
+
+        $result = $pipeline->execute();
+        $this->assertArrayHasKey('exception', $result);
+        $this->assertEquals('caught', $result['exception']);
+        $this->assertArrayHasKey('zub', $result);
+        $this->assertArrayNotHasKey('action', $result);
+
+
+        $pipeline = new Pipeline();
+        $pipeline->send(new ArrayObject(['zub' => 'kovoy']));
+        $pipeline->pipe(function ($context, $next) {
+            try {
+                return $next($context);
+            } catch (Exception $e) {
+                $context['exception'] = 'caught';
+            }
+            return $context;
+        });
+
+        $pipeline->pipe(function ($context, $next) {
+            // $context is object
+            $context['action'] = 'before_exception';
+            throw new Exception();
+            return $next($context);
+        });
+
+        $result = $pipeline->execute();
+        $this->assertArrayHasKey('exception', $result);
+        $this->assertEquals('caught', $result['exception']);
+        $this->assertArrayHasKey('zub', $result);
+        $this->assertArrayHasKey('action', $result);
 
     }
 
