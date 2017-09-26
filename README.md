@@ -56,5 +56,40 @@ $result = $pipeline->through($stages)->send(1)
             $context += 1000;
             return $context;});
 $result // 1111
-
 ```
+
+## Exceptions
+
+Package has not integrated exception catch support. It is simple for you  to include exception _try-catch_ block into one of pipeline stages.
+```php
+    use AndyDune\Pipeline\Pipeline;
+    $pipeline = new Pipeline();
+    $pipeline->send(['zub' => 'kovoy']);
+    $pipeline->pipe(function ($context, $next) {
+        try {
+            return $next($context);
+        } catch (Exception $e) {
+            $context['exception'] = 'caught';
+        }
+        return $context;
+    });
+
+    $pipeline->pipe(function ($context, $next) {
+        $context['action'] = 'before_exception';
+        throw new Exception();
+        return $next($context); // it will be never execute
+    });
+     
+    // This stage will never execute
+    $pipeline->pipe(function ($context, $next) {
+        $context['after_exception'] = 'ignored';
+        return $next($context);
+    });
+
+    $result = $pipeline->execute();
+    array_key_exists('zub', $result);       // true
+    array_key_exists('exception', $result); // true
+    array_key_exists('action', $result);    // false
+    array_key_exists('after_exception', $result); // false
+
+```  
