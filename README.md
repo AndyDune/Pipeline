@@ -58,6 +58,59 @@ $result = $pipeline->through($stages)->send(1)
 $result // 1111
 ```
 
+## Types of stages
+
+Basically each stage can be `Closere`:
+```php
+$pipeline = new Pipeline();
+$pipeline->pipe(function ($context, $next) {
+    $context['closure'] = 'was here';
+    return $next($context); 
+});
+```
+
+It can be an instance of class with callable interface:
+```php
+$instance = new class() {
+    public function __invoke($context, $next) 
+    {
+        $context['invoke'] = 'was here';
+        return $next($context); 
+    }
+}
+
+$pipeline = new Pipeline();
+$pipeline->pipe($instance);
+```
+
+It can be a class name with method __invoke or any method you describe:
+```php
+class Trim
+{
+    public function __invoke($context, $next) 
+    {
+        $context['class_invoke'] = 'was here';
+        return $next($context); 
+    }
+}
+
+$pipeline = new Pipeline();
+$pipeline->pipe(Trim::class);
+
+class Trim
+{
+    public function handle($context, $next) 
+    {
+        $context['class_invoke'] = 'was here';
+        return $next($context); 
+    }
+}
+
+$pipeline = new Pipeline();
+$pipeline->pipe(Trim::class . ':handle');
+```
+
+
 ## Exceptions
 
 Package has not integrated exception catch support. It is simple for you  to include exception _try-catch_ block into one of pipeline stages.

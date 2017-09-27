@@ -5,7 +5,7 @@
     "keywords": [
         "php",
         "middleware",
-        "pipeline pattern"
+        "pipeline"
     ],
     "homepage": "https://github.com/AndyDune/Pipeline",
     "autoload": {
