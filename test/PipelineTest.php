@@ -12,6 +12,7 @@
 
 namespace AndyDuneTest;
 use AndyDune\Pipeline\Pipeline;
+use AndyDune\Pipeline\Stage\ExceptionCatch;
 use PHPUnit\Framework\TestCase;
 use AndyDune\Pipeline\Example\Trim;
 use Exception;
@@ -60,11 +61,11 @@ class PipelineTest extends TestCase
         $pipeline = new Pipeline();
 
         $stages = [
-            function($contest, $next) {
+            function ($contest, $next) {
                 $contest += 100;
                 return $next($contest);
             },
-            function($contest, $next) {
+            function ($contest, $next) {
                 $contest += 10;
                 return $next($contest);
             }
@@ -72,7 +73,8 @@ class PipelineTest extends TestCase
         $result = $pipeline->through($stages)->send(1)
             ->then(function ($context) {
                 $context += 1000;
-                return $context;});
+                return $context;
+            });
         $this->assertEquals(1111, $result);
     }
 
@@ -156,6 +158,24 @@ class PipelineTest extends TestCase
         $this->assertEquals('caught', $result['exception']);
         $this->assertArrayHasKey('zub', $result);
         $this->assertArrayHasKey('action', $result);
+    }
+
+    /**
+     * Test exception catch default stage.
+     */
+    public function testDefaultExceptionStage()
+    {
+        $pipeline = new Pipeline();
+        $pipeline->send(['zub' => 'kovoy']);
+        $pipeline->pipe(ExceptionCatch::class);
+        $pipeline->pipe(function ($context, $next) {
+            $context['action'] = 'before_exception';
+            throw new Exception('jump');
+            return $next($context);
+        });
+        $result = $pipeline->execute();
+        $this->assertInstanceOf(Exception::class, $result);
+        $this->assertEquals('jump', $result->getMessage());
 
     }
 

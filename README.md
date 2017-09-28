@@ -39,6 +39,8 @@ Operations in a pipeline, stages, can be anything that satisfies the `callable`
 type-hint. So closures and anything that's invokable is good.
 
 ```php
+use AndyDune\Pipeline\Pipeline;
+ 
 $pipeline = new Pipeline();
 
 $stages = [
@@ -60,7 +62,7 @@ $result // 1111
 
 ## Types of stages
 
-Basically each stage can be `Closere`:
+Basically each stage can be `Closure`:
 ```php
 $pipeline = new Pipeline();
 $pipeline->pipe(function ($context, $next) {
@@ -146,3 +148,18 @@ Package has not integrated exception catch support. It is simple for you  to inc
     array_key_exists('after_exception', $result); // false
 
 ```  
+
+There is a class you may use as stage for your pipeline for catch exception  in this package.
+```php
+ 
+    $pipeline = new Pipeline();
+    $pipeline->send(['zub' => 'kovoy']);
+    $pipeline->pipe(AndyDune\Pipeline\Stage\ExceptionCatch::class);
+    $pipeline->pipe(function ($context, $next) {
+        $context['action'] = 'before_exception';
+        throw new Exception('jump');
+    });
+    $result = $pipeline->execute();
+    
+    $result instancheof \Exception // true
+```
