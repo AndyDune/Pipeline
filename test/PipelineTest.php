@@ -43,7 +43,6 @@ class PipelineTest extends TestCase
      */
     public function testNoFinalCallback()
     {
-
         $pipeline = new Pipeline();
         $pipeline->send(1);
         $pipeline->pipe(function ($context, $next) {
@@ -93,7 +92,7 @@ class PipelineTest extends TestCase
 
         $pipeline = new Pipeline();
         $pipeline->send(' 123 ');
-        $pipeline->pipe(Trim::class . ':handle:1 ');
+        $pipeline->pipe(Trim::class , 'handle', '1 ');
         $result = $pipeline->then(function ($context) {
             return $context;
         });

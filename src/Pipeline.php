@@ -91,13 +91,20 @@ class Pipeline
         return $this;
     }
 
-    public function pipe($pipe, $stageName = null)
+    /**
+     * Add stage for workflow.
+     *
+     * @param $pipe class name or service name for
+     * @param string $methodName method name for this object
+     * @param string $params additional params
+     * @return $this
+     */
+    public function pipe($pipe, $methodName = '', $params = '')
     {
-        if ($stageName === null) {
-            $this->pipes[] = $pipe;
-        } else {
-            $this->pipes[$stageName] = $pipe;
+        if ($methodName or $params) {
+            $pipe .= ':' . $methodName . ':' . $params;
         }
+        $this->pipes[] = $pipe;
         return $this;
     }
 
