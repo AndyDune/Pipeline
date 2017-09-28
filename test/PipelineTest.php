@@ -51,7 +51,6 @@ class PipelineTest extends TestCase
         });
         $result = $pipeline->execute();
         $this->assertEquals(101, $result);
-
     }
 
 
@@ -97,6 +96,15 @@ class PipelineTest extends TestCase
             return $context;
         });
         $this->assertEquals('23', $result);
+
+        $pipeline = new Pipeline();
+        $pipeline->send(' 123 ');
+        $pipeline->pipe(new Trim , 'handle', '3 ');
+        $result = $pipeline->then(function ($context) {
+            return $context;
+        });
+        $this->assertEquals('12', $result);
+
 
     }
 

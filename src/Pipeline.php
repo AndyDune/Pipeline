@@ -99,11 +99,18 @@ class Pipeline
      * @param string $params additional params
      * @return $this
      */
-    public function pipe($pipe, $methodName = '', $params = '')
+    public function pipe($pipe, $methodName = '', ...$params)
     {
-        if ($methodName or $params) {
-            $pipe .= ':' . $methodName . ':' . $params;
+        if ($pipe instanceof Closure) {
+            $this->pipes[] = $pipe;
+            return $this;
         }
+
+        $pipe = [
+            $pipe,
+            $methodName,
+            $params,
+        ];
         $this->pipes[] = $pipe;
         return $this;
     }
@@ -172,7 +179,7 @@ class Pipeline
                     // since the object we're given was already a fully instantiated object.
                     $parameters = [$passable, $stack];
                 } else {
-                    list($name, $methodFromString, $parameters) = $this->parsePipeString($pipe);
+                    list($name, $methodFromString, $parameters) = $this->parsePipeData($pipe);
                     if($methodFromString) {
                         $method = $methodFromString;
                     }
@@ -184,7 +191,11 @@ class Pipeline
                     // If the pipe is a string we will parse the string and resolve the class out
                     // of the dependency injection container. We can then build a callable and
                     // execute the pipe function giving in the parameters that are required.
-                    $pipe = $this->getContainer()->get($name);
+                    if (is_string($name)) {
+                        $pipe = $this->getContainer()->get($name);
+                    } else {
+                        $pipe = $name;
+                    }
 
                     $parameters = array_merge([$passable, $stack], $parameters);
                 }
@@ -206,9 +217,19 @@ class Pipeline
      * @param  string $pipe
      * @return array
      */
-    protected function parsePipeString($pipe)
+    protected function parsePipeData($pipe)
     {
-        list($name, $method, $parameters) = array_pad(explode(':', $pipe, 3), 3, null);
+        if (is_array($pipe)) {
+            $pipe = new \ArrayObject($pipe);
+            if (! $pipe[0]) {
+                throw  new Exception('I need to know name of service (class)');
+            }
+            $name       = $pipe[0];
+            $method     = $pipe[1];
+            $parameters = $pipe[2];
+        } else {
+            list($name, $method, $parameters) = array_pad(explode(':', $pipe, 3), 3, null);
+        }
 
         if (is_string($parameters)) {
             $parameters = explode(',', $parameters);

@@ -109,7 +109,7 @@ class Trim
 }
 
 $pipeline = new Pipeline();
-$pipeline->pipe(Trim::class . ':handle');
+$pipeline->pipe(Trim::class,  'handle');
 ```
 
 
