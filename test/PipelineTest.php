@@ -11,6 +11,7 @@
 
 
 namespace AndyDuneTest;
+use AndyDune\Pipeline\Example\PowerOfNumber;
 use AndyDune\Pipeline\Pipeline;
 use AndyDune\Pipeline\Stage\ExceptionCatch;
 use PHPUnit\Framework\TestCase;
@@ -183,6 +184,38 @@ class PipelineTest extends TestCase
         $result = $pipeline->execute();
         $this->assertInstanceOf(Exception::class, $result);
         $this->assertEquals('jump', $result->getMessage());
+
+    }
+
+    public function testParams()
+    {
+        $pipeline = new Pipeline();
+        $pipeline->send(2);
+        $pipeline->pipe(PowerOfNumber::class);
+        $result = $pipeline->execute();
+        $this->assertEquals(4, $result);
+
+        $pipeline = new Pipeline();
+        $pipeline->send(2);
+        $pipeline->pipe(PowerOfNumber::class, null, 3);
+        $result = $pipeline->execute();
+        $this->assertEquals(8, $result);
+
+
+        $pipeline = new Pipeline();
+        $pipeline->send(2);
+        $pipeline->pipe(PowerOfNumber::class, 'power3');
+        $result = $pipeline->execute();
+        $this->assertEquals(8, $result);
+
+        $pipeline = new Pipeline();
+        $pipeline->send(2);
+        $pipeline->pipe(PowerOfNumber::class, null, [2, 3, 4]);
+        $result = $pipeline->execute();
+        $this->assertCount(3, $result);
+        $this->assertEquals(4, $result[0]);
+        $this->assertEquals(8, $result[1]);
+        $this->assertEquals(16, $result[2]);
 
     }
 

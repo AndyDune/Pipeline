@@ -112,6 +112,57 @@ $pipeline = new Pipeline();
 $pipeline->pipe(Trim::class,  'handle');
 ```
 
+## Additional parameters for stage
+
+Sometimes you need to pass any number of additional parameters to pipe stage during description. 
+It needs for test and it very good for more flexibility of stage. It increases reuse of class.
+
+Lets look at the example. It is very simple example.
+
+Here is example class for stage:  
+```php
+namespace AndyDune\Pipeline\Example;
+class PowerOfNumber
+{
+    public function __invoke($data, callable $next, $power = 2)
+    {
+        if (is_array($power)) {
+            array_walk($power, function (&$value, $key) use ($data) {
+                $value = pow($data, $value);
+            });
+            return $next($power);
+        }
+        $data = $this->handle($data, $power);
+        return $next($data);
+    }
+    protected function handle($number, $power)
+    {
+        return pow($number, $power);
+    }
+}
+``` 
+
+Lets use it:
+
+```php
+    use use AndyDune\Pipeline\Pipeline;
+    use AndyDune\Pipeline\Example;
+    
+    $pipeline = new Pipeline();
+    $pipeline->send(2);
+    $pipeline->pipe(PowerOfNumber::class);
+    $result = $pipeline->execute(); // == 4
+
+    $pipeline = new Pipeline();
+    $pipeline->send(2);
+    $pipeline->pipe(PowerOfNumber::class, null, 3);
+    $result = $pipeline->execute(); // == 8
+    
+    $pipeline = new Pipeline();
+    $pipeline->send(2);
+    $pipeline->pipe(PowerOfNumber::class, null, 4);
+    $result = $pipeline->execute(); // == 16
+```   
 
 ## Exceptions
 
