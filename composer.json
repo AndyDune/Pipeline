@@ -7,6 +7,12 @@
         "middleware",
         "pipeline"
     ],
+    "authors": [
+        {
+            "name": "Andrey Ryzhov",
+            "email": "info@rznw.ru"
+        }
+    ],
     "homepage": "https://github.com/AndyDune/Pipeline",
     "autoload": {
         "psr-4": {

@@ -112,6 +112,48 @@ $pipeline = new Pipeline();
 $pipeline->pipe(Trim::class,  'handle');
 ```
 
+
+## Container provider (service provider)
+
+String can de passed as pipeline stage. By default it is a class name. 
+It's make possible by using default provider: `AndyDune\Pipeline\PipeIsClassName`  
+You can set your own provider, with injections you need. Your class must implements interface: `Interop\Container\ContainerInterface`
+
+Use your provider as parameter for pipeline constructor:
+```php
+use Interop\Container\ContainerInterface;
+
+class SpecialPipelineContainer implements ContainerInterface
+{
+    /**
+     * @var  \Rzn\ObjectBuilder
+     */
+    protected $objectBuilder;
+
+    public function get($name)
+    {
+        /*
+        do anything to build object using $name
+        */
+        return $object;
+    }
+    
+    public function has($name)
+    {
+        /*
+        do anything to check required object can be build  
+        */
+        return $exist;
+    }
+}
+
+$container = new SpecialPipelineContainer();
+$pipeLine = new Pipeline($container);
+
+$pipeLine->pipe('any string to get stage from container');
+
+```
+
 ## Additional parameters for stage
 
 Sometimes you need to pass any number of additional parameters to pipe stage during description. 
