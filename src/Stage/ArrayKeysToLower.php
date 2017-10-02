@@ -48,16 +48,17 @@ class ArrayKeysToLower
         if (! is_array($context)) {
             return $next($context);
         }
-
         if ($keysToCheck) {
             if (! is_array($keysToCheck)) {
                 $keysToCheck = [$keysToCheck];
             }
-            array_walk($context, (function(&$value, $key) use($keysToCheck, $recursive){
+            $function = function(&$value, $key) use($keysToCheck, $recursive){
                 if (in_array($key, $keysToCheck)) {
                     $value = $this->handleArray($value, $recursive);
                 }
-            })->bindTo($this));
+            };
+            $function->bindTo($this);
+            array_walk($context, $function);
             return $next($context);
         }
         return $next($this->handleArray($context, $recursive));
