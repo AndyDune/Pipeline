@@ -36,9 +36,28 @@ namespace AndyDune\Pipeline\Stage;
 
 class ArrayKeysToLower
 {
-    public function __invoke($context, callable $next, $recursive = true)
+    /**
+     * @param $context
+     * @param callable $next
+     * @param bool $recursive is recursive, default if true
+     * @param null|array|string $keysToCheck keys in $context to process
+     * @return mixed
+     */
+    public function __invoke($context, callable $next, $recursive = true, $keysToCheck = null)
     {
-        if (!is_array($context)) {
+        if (! is_array($context)) {
+            return $next($context);
+        }
+
+        if ($keysToCheck) {
+            if (! is_array($keysToCheck)) {
+                $keysToCheck = [$keysToCheck];
+            }
+            array_walk($context, (function(&$value, $key) use($keysToCheck, $recursive){
+                if (in_array($key, $keysToCheck)) {
+                    $value = $this->handleArray($value, $recursive);
+                }
+            })->bindTo($this));
             return $next($context);
         }
         return $next($this->handleArray($context, $recursive));
@@ -47,6 +66,10 @@ class ArrayKeysToLower
 
     protected function handleArray($array, $recursive)
     {
+        if (! is_array($array)) {
+            return $array;
+        }
+
         $resultArray = [];
         foreach($array as $key => $value) {
             $key = $this->toLower($key);

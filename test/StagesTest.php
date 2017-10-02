@@ -55,6 +55,18 @@ class StagesTest extends TestCase
         $this->assertEquals(13, $result['id']);
         $this->assertArrayNotHasKey('ru', $result['array']);
         $this->assertArrayNotHasKey('en', $result['array']);
+
+        $result = (new Pipeline())
+            ->send($array)
+            ->pipe(ArrayKeysToLower::class, null, true, ['aRRay'])->execute();
+
+        $this->assertCount(3, $result);
+        $this->assertArrayHasKey('aRRay', $result);
+        $this->assertArrayHasKey('ID', $result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('ru', $result['aRRay']);
+        $this->assertArrayHasKey('en', $result['aRRay']);
+
     }
 
 }
