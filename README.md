@@ -256,3 +256,34 @@ There is a class you may use as stage for your pipeline for catch exception  in 
     
     $result instancheof \Exception // true
 ```
+
+## Examples
+
+### Caching
+
+You have service for retrieve data. And you don't need to change its code. 
+Just use it as a stage in the pipeline. 
+
+```php
+
+// Description
+$pipeline = new Pipeline();
+$pipeline->pipe(function($key, $next) {
+    /*
+    * Cache adapter with (PSR-16) interface
+    * Ones a have used Symfony Cache Component [https://github.com/symfony/cache] 
+    * It's for example
+    */
+    $cache = new FilesystemCache();
+    if ($cache->has($key)) {
+        return $cache->get($key);
+    }
+    $data = $next($catId);
+    $cache->set($key, $data);
+    return $data;
+});
+$pipeline->pipe(DataRetrieveClass::class, 'getImportantData');
+ 
+// Execute 
+$results = $pipeline->send($key)->execute();
+```
