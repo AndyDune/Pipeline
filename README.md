@@ -287,3 +287,12 @@ $pipeline->pipe(DataRetrieveClass::class, 'getImportantData');
 // Execute 
 $results = $pipeline->send($key)->execute();
 ```
+
+## Analogues
+
+[Laravel pipeline](https://laravel.com/api/5.5/Illuminate/Pipeline.html) - it do very the same I wanted, but I need more tools for testing purpose. And I don't like laraver service manager. it has not common interface. 
+My pipeline may use service managers based on  [container-interop with PSR-11 interfaces](https://github.com/container-interop/container-interop).
+
+[League\Pipeline](https://github.com/thephpleague/pipeline) - it has good documentation. But has bad feature - poor workflow control. To stop execution it need to use exception. 
+
+   
