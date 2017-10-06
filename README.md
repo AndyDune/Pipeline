@@ -23,7 +23,7 @@ php composer.phar require andydune/pipeline
 Or edit your `composer.json`:
 ```
 "require" : {
-     "andydune/pipeline": "^0"
+     "andydune/pipeline": "^1"
 }
 
 ```
