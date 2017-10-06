@@ -85,6 +85,22 @@ $pipeline = new Pipeline();
 $pipeline->pipe($instance);
 ```
 
+It can be an instance of class with any method:
+```php
+$instance = new class() {
+    public function doIt($context, $next) 
+    {
+        $context['invoke'] = 'was here';
+        return $next($context); 
+    }
+}
+
+$pipeline = new Pipeline();
+$pipeline->pipe($instance, 'doIt');
+```
+
+
+
 It can be a class name with method __invoke or any method you describe:
 ```php
 class Trim
