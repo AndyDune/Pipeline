@@ -23,7 +23,7 @@ php composer.phar require andydune/pipeline
 Or edit your `composer.json`:
 ```
 "require" : {
-     "andydune/pipeline": "^0"
+     "andydune/pipeline": "^1"
 }
 
 ```
@@ -85,10 +85,10 @@ $pipeline = new Pipeline();
 $pipeline->pipe($instance);
 ```
 
-It can be an instance of class with any method you describe:
+It can be an instance of class with any method:
 ```php
 $instance = new class() {
-    public function makeIt($context, $next) 
+    public function doIt($context, $next) 
     {
         $context['invoke'] = 'was here';
         return $next($context); 
@@ -96,10 +96,10 @@ $instance = new class() {
 }
 
 $pipeline = new Pipeline();
-$pipeline->pipe($instance, 'makeIt');
+$pipeline->pipe($instance, 'doIt');
 ```
 
-It can be a class name with method __invoke:
+It can be a class name with method __invoke or any method you describe:
 ```php
 class Trim
 {
