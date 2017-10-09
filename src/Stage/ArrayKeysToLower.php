@@ -1,11 +1,5 @@
 <?php
 /**
- * ----------------------------------------------
- * | Author: Андрей Рыжов (Dune) <info@rznw.ru>   |
- * | Site: www.rznw.ru                            |
- * | Phone: +7 (4912) 51-10-23                    |
- * | Date: 29.09.2017                             |
- * -----------------------------------------------
  *
  * It get input data as context and if it is array put keys to lower case.
  *
@@ -28,7 +22,15 @@
                 'en' => 'EN',
             ]
         ];
-*/
+ *
+ * PHP version 5.6, 7.0 and 7.1
+ *
+ * @package andydune/pipeline
+ * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @author Andrey Ryzhov  <info@rznw.ru>
+ * @copyright 2017 Andrey Ryzhov
+ */
 
 
 

@@ -1,12 +1,14 @@
 <?php
 /**
- * ----------------------------------------------
- * | Автор: Андрей Рыжов (Dune) <info@rznw.ru>   |
- * | Сайт: www.rznw.ru                           |
- * | Телефон: +7 (4912) 51-10-23                 |
- * | Дата: 19.09.2017                            |
- * -----------------------------------------------
+ * This package provides a pipeline pattern implementation. It base on middleware approach.
  *
+ * PHP version 5.6, 7.0 and 7.1
+ *
+ * @package andydune/pipeline
+ * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @author Andrey Ryzhov  <info@rznw.ru>
+ * @copyright 2017 Andrey Ryzhov
  */
 
 namespace AndyDune\Pipeline;
@@ -94,7 +96,7 @@ class Pipeline
     /**
      * Add stage for workflow.
      *
-     * @param $pipe class name or service name for
+     * @param $pipe class name or service name for stage.
      * @param string $methodName method name for this object
      * @param string $params additional params
      * @return $this
@@ -252,5 +254,4 @@ class Pipeline
 
         return $this->container;
     }
-
 }
