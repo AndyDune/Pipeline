@@ -60,6 +60,35 @@ $result = $pipeline->through($stages)->send(1)
 $result // 1111
 ```
 
+## Usage as Zend FW 3 module
+
+By default string as stage for pipeline means name of class. 
+If you create pipeline object without parameters service container implements `AndyDune\Pipeline\PipeIsClassName`. It only creates instance of given class and return it.
+If this package is used as part of of _Zend FW 3_ you can use Zend's services for retrieve instances.
+
+First you must install package with composer. 
+Then copy file `vendor/andydune/pipeline/config/pipeline.global.php` to `config/autoload/pipeline.global.php`
+
+Description fot your pipeline in factory:  
+```php
+use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\ContainerInterface;
+class DunhillFactory implements FactoryInterface
+{
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $pipeline = $container->get('pipeline');
+        $pipeline->pipe('service name within Zend3');
+        $pipeline->pipe(function($data, $next) {
+            return $next($data); 
+        });
+        return $pipeline;
+    }
+}
+```
+
+If you don't need use Zend services use pipeline directly.         
+
 ## Types of stages
 
 Basically each stage can be `Closure`:
