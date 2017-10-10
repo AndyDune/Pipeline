@@ -219,4 +219,27 @@ class PipelineTest extends TestCase
 
     }
 
+    public function test()
+    {
+        $instance = new class() {
+            public function addBraceLeft($string) {
+                return '(' . $string;
+            }
+        };
+
+        $instanceNormal = new class() {
+            public function addBraceRight($string, callable $next) {
+                $string =  $string . ')';
+                return $next($string);
+            }
+        };
+
+        $pipeline = new Pipeline();
+        $pipeline->send('puh');
+        $pipeline->pipeForContainer($instance, 'addBraceLeft');
+        $pipeline->pipe($instanceNormal, 'addBraceRight');
+        $result = $pipeline->execute();
+        $this->assertEquals('(puh)', $result);
+
+    }
 }

@@ -112,6 +112,25 @@ class Pipeline
             $pipe,
             $methodName,
             $params,
+            false
+        ];
+        $this->pipes[] = $pipe;
+        return $this;
+    }
+
+
+    public function pipeForContainer($pipe, $methodName = '', ...$params)
+    {
+        if ($pipe instanceof Closure) {
+            $this->pipes[] = $pipe;
+            return $this;
+        }
+
+        $pipe = [
+            $pipe,
+            $methodName,
+            $params,
+            true
         ];
         $this->pipes[] = $pipe;
         return $this;
@@ -181,7 +200,7 @@ class Pipeline
                     // since the object we're given was already a fully instantiated object.
                     $parameters = [$passable, $stack];
                 } else {
-                    list($name, $methodFromString, $parameters) = $this->parsePipeData($pipe);
+                    list($name, $methodFromString, $parameters, $needContainer) = $this->parsePipeData($pipe);
                     if($methodFromString) {
                         $method = $methodFromString;
                     }
@@ -200,6 +219,18 @@ class Pipeline
                     }
 
                     $parameters = array_merge([$passable, $stack], $parameters);
+                    //
+                    if ($needContainer) {
+                        $pipeReturn = function ($data, $next) use ($pipe, $method) {
+                            if ($method) {
+                                $data = $pipe->{$method}($data);
+                            } else {
+                                $data = $pipe($data);
+                            }
+                            return $next($data);
+                        };
+                        return $pipeReturn(...$parameters);
+                    }
                 }
 
                 if ($method) {
@@ -222,22 +253,23 @@ class Pipeline
     protected function parsePipeData($pipe)
     {
         if (is_array($pipe)) {
-            $pipe = new \ArrayObject($pipe);
             if (! $pipe[0]) {
                 throw  new Exception('I need to know name of service (class)');
             }
             $name       = $pipe[0];
             $method     = $pipe[1];
             $parameters = $pipe[2];
+            $needContainer = $pipe[3];
         } else {
             list($name, $method, $parameters) = array_pad(explode(':', $pipe, 3), 3, null);
+            $needContainer = null;
         }
 
         if (is_string($parameters)) {
             $parameters = explode(',', $parameters);
         }
 
-        return [$name, $method, $parameters];
+        return [$name, $method, $parameters, $needContainer];
     }
 
     /**
