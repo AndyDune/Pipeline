@@ -11,6 +11,7 @@
 
 
 namespace AndyDuneTest;
+use AndyDune\Pipeline\Example\Methods;
 use AndyDune\Pipeline\Example\PowerOfNumber;
 use AndyDune\Pipeline\Pipeline;
 use AndyDune\Pipeline\Stage\ExceptionCatch;
@@ -221,23 +222,12 @@ class PipelineTest extends TestCase
 
     public function test()
     {
-        $instance = new class() {
-            public function addBraceLeft($string) {
-                return '(' . $string;
-            }
-        };
-
-        $instanceNormal = new class() {
-            public function addBraceRight($string, callable $next) {
-                $string =  $string . ')';
-                return $next($string);
-            }
-        };
+        $instance = new Methods();
 
         $pipeline = new Pipeline();
         $pipeline->send('puh');
         $pipeline->pipeForContainer($instance, 'addBraceLeft');
-        $pipeline->pipe($instanceNormal, 'addBraceRight');
+        $pipeline->pipe(Methods::class, 'addBraceRight');
         $result = $pipeline->execute();
         $this->assertEquals('(puh)', $result);
 
