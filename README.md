@@ -16,7 +16,7 @@ Installation using composer:
 ```
 composer require andydune/pipeline 
 ```
-Or if composer doesn't install globa:
+Or if composer didn't install globally:
 ```
 php composer.phar require andydune/pipeline
 ```
@@ -60,7 +60,7 @@ $result = $pipeline->through($stages)->send(1)
 $result // 1111
 ```
 
-## Usage as Zend FW 3 module
+## Usage within Zend FW 3
 
 By default string as stage for pipeline means name of class. 
 If you create pipeline object without parameters service container implements `AndyDune\Pipeline\PipeIsClassName`. It only creates instance of given class and return it.
