@@ -31,12 +31,6 @@
     "config": {
         "sort-packages": "true"
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.8-dev",
-            "dev-develop": "0.8-dev"
-        }
-    },
     "autoload-dev": {
         "psr-4": {
             "AndyDuneTest\\": "test/"
