@@ -119,6 +119,14 @@ class Pipeline
     }
 
 
+    /**
+     * Add stage without middleware interface.
+     *
+     * @param $pipe description for stage
+     * @param string $methodName
+     * @param array ...$params
+     * @return $this
+     */
     public function pipeForContainer($pipe, $methodName = '', ...$params)
     {
         if ($pipe instanceof Closure) {
