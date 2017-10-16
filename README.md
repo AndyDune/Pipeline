@@ -159,6 +159,48 @@ $pipeline = new Pipeline();
 $pipeline->pipe(Trim::class,  'handle');
 ```
 
+## Use object for stage without middleware interface
+
+You can use methods which don't execute $next function. It gets some data and return results.
+There is special method: 'pipeForContainer'
+
+Example class. 
+```php
+namespace AndyDune\Pipeline\Example;
+
+class Methods
+{
+    // return result - no calling next() 
+    public function addBraceLeft($string)
+    {
+        return '(' . $string;
+    }
+
+    // It has middleware interface
+    public function addBraceRight($string, callable $next)
+    {
+        $string =  $string . ')';
+        return $next($string);
+    }
+}
+``` 
+
+
+```php
+
+$instance = new Methods();
+
+$pipeline = new Pipeline();
+$pipeline->send('puh');
+
+$pipeline->pipeForContainer($instance, 'addBraceLeft');
+
+$pipeline->pipe(Methods::class, 'addBraceRight');
+$result = $pipeline->execute();
+
+$result == '(puh)';
+``` 
+
 
 ## Container provider (service provider)
 
