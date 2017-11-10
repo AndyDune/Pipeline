@@ -88,7 +88,7 @@ class DunhillFactory implements FactoryInterface
 }
 ```
 
-If you don't need use Zend services use pipeline directly.         
+If you don't work with Zend services use pipeline directly.         
 
 ## Types of stages
 
@@ -129,7 +129,7 @@ $pipeline = new Pipeline();
 $pipeline->pipe($instance, 'doIt');
 ```
 
-It can be a class name with method __invoke or any method you describe:
+It can be a class name with method `__invoke` or any method you describe:
 ```php
 class Trim
 {
