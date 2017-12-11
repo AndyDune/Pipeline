@@ -24,8 +24,8 @@ class InitializerTest extends TestCase
         $instance = new Methods();
 
         $pipeline = new Pipeline();
-        $pipeline->addInitializer((new InitializeSetAnyValueWithAnyMethod())->setMethod('addBraceLeft')->setValue('['));
-        $pipeline->addInitializer((new InitializeSetAnyValueWithAnyMethod())->setMethod('addBraceRight')->setValue(']'));
+        $pipeline->addInitializer((new InitializeSetAnyValueWithAnyMethod())->setMethod('setBraceLeft')->setValue('['));
+        $pipeline->addInitializer((new InitializeSetAnyValueWithAnyMethod())->setMethod('setBraceRight')->setValue(']'));
         $pipeline->send('puh');
         $pipeline->pipeForContainer($instance, 'addBraceLeft');
         $pipeline->pipe(Methods::class, 'addBraceRight');
