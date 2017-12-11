@@ -248,6 +248,7 @@ class Pipeline
                     $parameters = array_merge([$passable, $stack], $parameters);
                     //
                     if ($needContainer) {
+                        $this->initialize($pipe);
                         $pipeReturn = function ($data, $next) use ($pipe, $method) {
                             if ($method) {
                                 $data = $pipe->{$method}($data);
