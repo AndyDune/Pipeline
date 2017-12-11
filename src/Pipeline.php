@@ -44,6 +44,8 @@ class Pipeline
      */
     protected $container = null;
 
+    protected $initializers = [];
+
 
     /**
      * Create a new class instance.
@@ -65,6 +67,23 @@ class Pipeline
     {
         $this->passable = $passable;
         return $this;
+    }
+
+    public function addInitializer(callable $initializer)
+    {
+        $this->initializers[] = $initializer;
+        return $this;
+    }
+
+    protected function initialize($instance)
+    {
+        if (!$this->initializers) {
+            return;
+        }
+        foreach ($this->initializers as $initializer) {
+            $initializer($instance);
+        }
+        return;
     }
 
     /**
@@ -240,6 +259,8 @@ class Pipeline
                         return $pipeReturn(...$parameters);
                     }
                 }
+
+                $this->initialize($pipe);
 
                 if ($method) {
                     return method_exists($pipe, $method)

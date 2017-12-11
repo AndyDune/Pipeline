@@ -15,14 +15,34 @@ namespace AndyDune\Pipeline\Example;
 
 class Methods
 {
+
+    protected $braceLeft = '(';
+    protected $braceRight = ')';
+
+    /**
+     * @param string $braceLeft
+     */
+    public function setBraceLeft($braceLeft)
+    {
+        $this->braceLeft = $braceLeft;
+    }
+
+    /**
+     * @param string $braceRight
+     */
+    public function setBraceRight($braceRight)
+    {
+        $this->braceRight = $braceRight;
+    }
+
     public function addBraceLeft($string)
     {
-        return '(' . $string;
+        return $this->braceLeft . $string;
     }
 
     public function addBraceRight($string, callable $next)
     {
-        $string =  $string . ')';
+        $string =  $string . $this->braceRight;
         return $next($string);
     }
 
