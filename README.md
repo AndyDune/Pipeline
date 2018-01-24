@@ -299,25 +299,24 @@ Lets use it:
 
 You can use default pipeline stage creator with injection into stage objects services or any objects from outside. 
 
- There is injection with interfaces.
- 
- ```php
-     use use AndyDune\Pipeline\Pipeline;
-     
-     $pipeline->pipe(ClassHaveInterface::class);
-     $pipeline->addInitializer(function($stageObject) use ($someService) {
-        if ($stageObject instanceof UsefulInterface) {
-            $stageObject->setSomeService($someService);
-        }     
-     });
-     
-     $pipeline = new Pipeline();
-     $pipeline->pipe(ClassHaveInterface::class);
-     $result = $pipeline->execute();
+There is injection with interfaces.
 
- ``` 
+```php
+    use use AndyDune\Pipeline\Pipeline;
+    
+    $pipeline = new Pipeline();
+    
+    $pipeline->addInitializer(function($stageObject) use ($someService) {
+        if ($stageObject instanceof SomeServiceAwareInterface) {
+            $stageObject->setSomeService($someService)
+        }     
+    });
+    
+    $pipeline->pipe(ClassHaveInterface::class);
+    $result = $pipeline->execute();
+``` 
  
- This use method `addInitializer` which recieve callable parameter. 
+This use method `addInitializer` which recieve callable parameter. 
 
 
 ## Exceptions
