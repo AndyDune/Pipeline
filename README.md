@@ -295,6 +295,31 @@ Lets use it:
     $result = $pipeline->execute(); // == 16
 ```   
 
+## Dependency injection
+
+You can use default pipeline stage creator with injection into stage objects services or any objects from outside. 
+
+ There is injection with interfaces.
+ 
+ ```php
+     use use AndyDune\Pipeline\Pipeline;
+     
+     $pipeline->pipe(ClassHaveInterface::class);
+     $pipeline->addInitializer(function($stageObject) use ($someService) {
+        if ($stageObject instanceof UsefulInterface) {
+            $stageObject->setSomeService($someService);
+        }     
+     });
+     
+     $pipeline = new Pipeline();
+     $pipeline->pipe(ClassHaveInterface::class);
+     $result = $pipeline->execute();
+
+ ``` 
+ 
+ This use method `addInitializer` which recieve callable parameter. 
+
+
 ## Exceptions
 
 Package has not integrated exception catch support. It is simple for you  to include exception _try-catch_ block into one of pipeline stages.

@@ -69,6 +69,12 @@ class Pipeline
         return $this;
     }
 
+    /**
+     * Add initializer for DI with interface.
+     *
+     * @param callable $initializer
+     * @return $this
+     */
     public function addInitializer(callable $initializer)
     {
         $this->initializers[] = $initializer;
