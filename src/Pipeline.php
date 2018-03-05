@@ -270,9 +270,12 @@ class Pipeline
                 $this->initialize($pipe);
 
                 if ($method) {
-                    return method_exists($pipe, $method)
-                        ? $pipe->{$method}(...$parameters)
-                        : $pipe(...$parameters);
+                    if (method_exists($pipe, $method)) {
+                        return $pipe->{$method}(...$parameters);
+                    }
+                    throw new Exception('Method ' . $method . ' does not exist in stage with class ' . get_class($pipe));
+                } else if ($pipe instanceof StageInterface) {
+                    return $pipe->execute(...$parameters);
                 } else {
                     return $pipe(...$parameters);
                 }

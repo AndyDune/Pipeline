@@ -11,6 +11,7 @@
 
 
 namespace AndyDuneTest;
+use AndyDune\Pipeline\Example\InterfaceMethods;
 use AndyDune\Pipeline\Example\Methods;
 use AndyDune\Pipeline\Example\PowerOfNumber;
 use AndyDune\Pipeline\Pipeline;
@@ -209,7 +210,7 @@ class PipelineTest extends TestCase
         $result = $pipeline->execute();
         $this->assertEquals(8, $result);
 
-        $pipeline = new Pipeline();
+                $pipeline = new Pipeline();
         $pipeline->send(2);
         $pipeline->pipe(PowerOfNumber::class, null, [2, 3, 4]);
         $result = $pipeline->execute();
@@ -217,6 +218,41 @@ class PipelineTest extends TestCase
         $this->assertEquals(4, $result[0]);
         $this->assertEquals(8, $result[1]);
         $this->assertEquals(16, $result[2]);
+
+    }
+
+    public function testExceptionForMethodNotExists()
+    {
+        try {
+            $pipeline = new Pipeline();
+            $pipeline->send(2);
+            $pipeline->pipe(PowerOfNumber::class, 'notExistMethod');
+            $result = $pipeline->execute();
+            $this->assertTrue(false, 'This line must not be achived');
+        } catch (\AndyDune\Pipeline\Exception $e) {
+            $message = $e->getMessage();
+            $this->assertEquals('Method notExistMethod does not exist in stage with class ' . PowerOfNumber::class, $message);
+        }
+    }
+
+    public function testStageWithInterface()
+    {
+        $pipeline = new Pipeline();
+        $pipeline->send(2);
+        $result = $pipeline->pipe(InterfaceMethods::class)->execute();
+        $this->assertEquals(12, $result);
+
+        $pipeline = new Pipeline();
+        $pipeline->send(2);
+        $result = $pipeline->pipe(InterfaceMethods::class, 'handle')->execute();
+        $this->assertEquals(102, $result);
+
+
+        $pipeline = new Pipeline();
+        $pipeline->send(2);
+        $pipeline->pipe(InterfaceMethods::class);
+        $result = $pipeline->pipe(InterfaceMethods::class, 'handle')->execute();
+        $this->assertEquals(112, $result);
 
     }
 
