@@ -2,7 +2,7 @@
 /**
  * This package provides a pipeline pattern implementation. It base on middleware approach.
  *
- * PHP version 5.6, 7.0 and 7.1
+ * PHP version => 5.6
  *
  * @package andydune/pipeline
  * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
@@ -40,9 +40,9 @@ class Pipeline
     protected $method = null;
 
     /**
-     * @var ContainerInterface|null
+     * @var array of ContainerInterface
      */
-    protected $container = null;
+    protected $container = [];
 
     protected $initializers = [];
 
@@ -55,8 +55,12 @@ class Pipeline
      */
     public function __construct(ContainerInterface $container = null)
     {
-        $this->container = $container;
+        if ($container) {
+            $this->container[] = $container;
+        }
+        $this->container[] = new PipeIsClassName();
     }
+
     /**
      * Set the object being sent through the pipeline.
      *
@@ -246,7 +250,8 @@ class Pipeline
                     // of the dependency injection container. We can then build a callable and
                     // execute the pipe function giving in the parameters that are required.
                     if (is_string($name)) {
-                        $pipe = $this->getContainer()->get($name);
+                        //$pipe = $this->getContainer()->get($name);
+                        $pipe = $this->getPipeStageFromContainer($name);
                     } else {
                         $pipe = $name;
                     }
@@ -311,18 +316,28 @@ class Pipeline
         return [$name, $method, $parameters, $needContainer];
     }
 
+
+
+    protected function getPipeStageFromContainer($name)
+    {
+        /** @var ContainerInterface $container */
+        foreach($this->container as $container) {
+            if ($container->has($name)) {
+                return $container->get($name);
+            }
+        }
+        throw new Exception(sprintf('Stage %s was not found.', $name), 404);
+    }
+
+
     /**
      * Get the service locator instance.
      *
-     * @return ContainerInterface
+     * @return array
      * @throws \RuntimeException
      */
-    protected function getContainer()
+    protected function getContainers()
     {
-        if (! $this->container) {
-            $this->container = new PipeIsClassName();
-        }
-
         return $this->container;
     }
 }

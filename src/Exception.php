@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * PHP version 5.6, 7.0 and 7.1
+ * PHP version => 5.6
  *
  * @package andydune/pipeline
  * @link  https://github.com/AndyDune/Pipeline for the canonical source repository

@@ -208,6 +208,8 @@ String can de passed as pipeline stage. By default it is a class name.
 It's make possible by using default provider: `AndyDune\Pipeline\PipeIsClassName`  
 You can set your own provider, with injections you need. Your class must implements interface: `Interop\Container\ContainerInterface`
 
+If was not found stage with your provider system will try to use default provider. 
+
 Use your provider as parameter for pipeline constructor:
 ```php
 use Interop\Container\ContainerInterface;
@@ -316,7 +318,7 @@ There is injection with interfaces.
     $result = $pipeline->execute();
 ``` 
  
-This use method `addInitializer` which recieve callable parameter. 
+This use method `addInitializer` which receive callable parameter. 
 
 
 ## Exceptions

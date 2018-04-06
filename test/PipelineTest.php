@@ -1,21 +1,26 @@
 <?php
 /**
- * ----------------------------------------------
- * | Автор: Андрей Рыжов (Dune) <info@rznw.ru>   |
- * | Сайт: www.rznw.ru                           |
- * | Телефон: +7 (4912) 51-10-23                 |
- * | Дата: 19.09.2017                            |
- * -----------------------------------------------
+ * This package provides a pipeline pattern implementation. It base on middleware approach.
  *
+ * PHP version => 5.6
+ *
+ * @package andydune/pipeline
+ * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @author Andrey Ryzhov  <info@rznw.ru>
+ * @copyright 2017 Andrey Ryzhov
  */
+
 
 
 namespace AndyDuneTest;
 use AndyDune\Pipeline\Example\InterfaceMethods;
 use AndyDune\Pipeline\Example\Methods;
 use AndyDune\Pipeline\Example\PowerOfNumber;
+use AndyDune\Pipeline\Example\StageContainer;
 use AndyDune\Pipeline\Pipeline;
 use AndyDune\Pipeline\Stage\ExceptionCatch;
+use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 use AndyDune\Pipeline\Example\Trim;
 use Exception;
@@ -268,4 +273,30 @@ class PipelineTest extends TestCase
         $this->assertEquals('(puh)', $result);
 
     }
+
+    public function testProviderStack()
+    {
+        $instance = new Methods();
+
+        $container = new StageContainer();
+        $container->setStage('bracket_holder', $instance);
+
+        $pipeline = new Pipeline($container);
+        $pipeline->send('puh');
+        $pipeline->pipe('bracket_holder', 'addBraceLeftPipe');
+        $pipeline->pipe(Methods::class, 'addBraceRight');
+        $result = $pipeline->execute();
+        $this->assertEquals('(puh)', $result);
+
+        $pipeline = new Pipeline($container);
+        $pipeline->send('puh');
+        $pipeline->pipeForContainer('bracket_holder', 'addBraceLeft');
+        $pipeline->pipe(Methods::class, 'addBraceRight');
+        $result = $pipeline->execute();
+        $this->assertEquals('(puh)', $result);
+
+
+
+    }
+
 }

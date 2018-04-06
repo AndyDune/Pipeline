@@ -1,13 +1,16 @@
 <?php
 /**
- * ----------------------------------------------
- * | Author: Andrey Ryzhov (Dune) <info@rznw.ru> |
- * | Site: www.rznw.ru                           |
- * | Phone: +7 (4912) 51-10-23                   |
- * | Date: 05.03.2018                            |
- * -----------------------------------------------
+ * This package provides a pipeline pattern implementation. It base on middleware approach.
  *
+ * PHP version => 5.6
+ *
+ * @package andydune/pipeline
+ * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @author Andrey Ryzhov  <info@rznw.ru>
+ * @copyright 2017 Andrey Ryzhov
  */
+
 
 
 namespace AndyDune\Pipeline\Example;

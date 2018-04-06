@@ -4,7 +4,7 @@
  * Class place for use with ZendFW3.
  * Don't look at this if you use pipeline standalone.
  *
- * PHP version 5.6, 7.0 and 7.1
+ * PHP version => 5.6
  *
  * @package andydune/pipeline
  * @link  https://github.com/AndyDune/Pipeline for the canonical source repository

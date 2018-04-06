@@ -1,13 +1,16 @@
 <?php
 /**
- * ----------------------------------------------
- * | Author: Андрей Рыжов (Dune) <info@rznw.ru>  |
- * | Site: www.rznw.ru                           |
- * | Phone: +7 (4912) 51-10-23                   |
- * | Date: 10.10.2017                               |
- * -----------------------------------------------
+ * This package provides a pipeline pattern implementation. It base on middleware approach.
  *
+ * PHP version => 5.6
+ *
+ * @package andydune/pipeline
+ * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
+ * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @author Andrey Ryzhov  <info@rznw.ru>
+ * @copyright 2017 Andrey Ryzhov
  */
+
 
 
 namespace AndyDune\Pipeline\Example;
@@ -39,6 +42,13 @@ class Methods
     {
         return $this->braceLeft . $string;
     }
+
+    public function addBraceLeftPipe($string, callable $next)
+    {
+        $string =  $this->braceLeft . $string;
+        return $next($string);
+    }
+
 
     public function addBraceRight($string, callable $next)
     {
