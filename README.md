@@ -17,7 +17,7 @@ Installation using composer:
 ```
 composer require andydune/pipeline 
 ```
-Or if composer didn't install globally:
+Or if composer was not installed globally:
 ```
 php composer.phar require andydune/pipeline
 ```
