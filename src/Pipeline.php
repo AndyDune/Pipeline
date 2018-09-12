@@ -44,6 +44,9 @@ class Pipeline
      */
     protected $container = [];
 
+    /**
+     * @var array 
+     */
     protected $initializers = [];
 
 
