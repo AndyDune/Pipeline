@@ -1,7 +1,6 @@
 # AndyDune\Pipeline
 
 [![Build Status](https://travis-ci.org/AndyDune/Pipeline.svg?branch=master)](https://travis-ci.org/AndyDune/Pipeline)
-[![StyleCI](https://styleci.io/repos/103917140/shield)](https://styleci.io/repos/103917140)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Packagist Version](https://img.shields.io/packagist/v/andydune/pipeline.svg?style=flat-square)](https://packagist.org/packages/andydune/pipeline)
 [![Total Downloads](https://img.shields.io/packagist/dt/andydune/pipeline.svg?style=flat-square)](https://packagist.org/packages/andydune/pipeline)
@@ -36,7 +35,7 @@ php composer.phar update
 
 ## Usage
 
-Operations in a pipeline, stages, can be anything that satisfies the `callable`
+Operations in pipeline stages, can be anything that satisfies the `callable`
 type-hint. So closures and anything that's invokable is good.
 
 ```php
