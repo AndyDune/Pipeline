@@ -2,7 +2,7 @@
 /**
  * This package provides a pipeline pattern implementation. It base on middleware approach.
  *
- * PHP version => 5.6
+ * PHP version >= 7.1
  *
  * @package andydune/pipeline
  * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
@@ -12,8 +12,8 @@
  */
 
 
-
 namespace AndyDuneTest;
+
 use AndyDune\Pipeline\Example\InterfaceMethods;
 use AndyDune\Pipeline\Example\Methods;
 use AndyDune\Pipeline\Example\PowerOfNumber;
@@ -99,7 +99,7 @@ class PipelineTest extends TestCase
 
         $pipeline = new Pipeline();
         $pipeline->send(' 123 ');
-        $pipeline->pipe(Trim::class , 'handle', '1 ');
+        $pipeline->pipe(Trim::class, 'handle', '1 ');
         $result = $pipeline->then(function ($context) {
             return $context;
         });
@@ -107,7 +107,7 @@ class PipelineTest extends TestCase
 
         $pipeline = new Pipeline();
         $pipeline->send(' 123 ');
-        $pipeline->pipe(new Trim , 'handle', '3 ');
+        $pipeline->pipe(new Trim(), 'handle', '3 ');
         $result = $pipeline->then(function ($context) {
             return $context;
         });
@@ -215,7 +215,7 @@ class PipelineTest extends TestCase
         $result = $pipeline->execute();
         $this->assertEquals(8, $result);
 
-                $pipeline = new Pipeline();
+        $pipeline = new Pipeline();
         $pipeline->send(2);
         $pipeline->pipe(PowerOfNumber::class, null, [2, 3, 4]);
         $result = $pipeline->execute();
@@ -294,7 +294,6 @@ class PipelineTest extends TestCase
         $pipeline->pipe(Methods::class, 'addBraceRight');
         $result = $pipeline->execute();
         $this->assertEquals('(puh)', $result);
-
 
 
     }

@@ -8,6 +8,20 @@
 
 This package provides a pipeline pattern implementation. It base on middleware approach.
 
+
+Requirements
+------------
+
+PHP version >= 7.1
+
+For php 5.6 use version 1:
+```
+"require" : {
+     "andydune/pipeline": "1.*"
+}
+```
+
+
 Installation
 ------------
 
@@ -23,7 +37,7 @@ php composer.phar require andydune/pipeline
 Or edit your `composer.json`:
 ```
 "require" : {
-     "andydune/pipeline": "^1"
+     "andydune/pipeline": "^2"
 }
 
 ```

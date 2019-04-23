@@ -2,7 +2,7 @@
 /**
  * This package provides a pipeline pattern implementation. It base on middleware approach.
  *
- * PHP version => 5.6
+ * PHP version >= 7.1
  *
  * @package andydune/pipeline
  * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
@@ -12,6 +12,7 @@
  */
 
 namespace AndyDune\Pipeline;
+
 use Closure;
 use Interop\Container\ContainerInterface;
 
@@ -53,7 +54,7 @@ class Pipeline
     /**
      * Create a new class instance.
      *
-     * @param  ContainerInterface|null  $container
+     * @param ContainerInterface|null $container
      * @return void
      */
     public function __construct(ContainerInterface $container = null)
@@ -67,10 +68,10 @@ class Pipeline
     /**
      * Set the object being sent through the pipeline.
      *
-     * @param  mixed  $passable
+     * @param mixed $passable
      * @return $this
      */
-    public function send($passable)
+    public function send($passable): self
     {
         $this->passable = $passable;
         return $this;
@@ -82,7 +83,7 @@ class Pipeline
      * @param callable $initializer
      * @return $this
      */
-    public function addInitializer(callable $initializer)
+    public function addInitializer(callable $initializer): self
     {
         $this->initializers[] = $initializer;
         return $this;
@@ -102,10 +103,10 @@ class Pipeline
     /**
      * Set the array of pipes.
      *
-     * @param  array|mixed  $pipes
+     * @param array|mixed $pipes
      * @return $this
      */
-    public function through($pipes)
+    public function through($pipes): self
     {
         $this->pipes = is_array($pipes) ? $pipes : func_get_args();
 
@@ -115,10 +116,10 @@ class Pipeline
     /**
      * Set the method to call on the pipes.
      *
-     * @param  string  $method
+     * @param string $method
      * @return $this
      */
-    public function via($method)
+    public function via($method): self
     {
         $this->method = $method;
 
@@ -133,7 +134,7 @@ class Pipeline
      * @param string $params additional params
      * @return $this
      */
-    public function pipe($pipe, $methodName = '', ...$params)
+    public function pipe($pipe, $methodName = '', ...$params): self
     {
         if ($pipe instanceof Closure) {
             $this->pipes[] = $pipe;
@@ -159,7 +160,7 @@ class Pipeline
      * @param array ...$params
      * @return $this
      */
-    public function pipeForContainer($pipe, $methodName = '', ...$params)
+    public function pipeForContainer($pipe, $methodName = '', ...$params): self
     {
         if ($pipe instanceof Closure) {
             $this->pipes[] = $pipe;
@@ -179,7 +180,7 @@ class Pipeline
     /**
      * Run the pipeline with a final destination callback.
      *
-     * @param  \Closure  $destination
+     * @param \Closure $destination
      * @return mixed
      */
     public function then(Closure $destination)
@@ -200,7 +201,9 @@ class Pipeline
     public function execute()
     {
         $pipeline = array_reduce(
-            array_reverse($this->pipes), $this->carry(), function($passable){ return $passable; }
+            array_reverse($this->pipes), $this->carry(), function ($passable) {
+            return $passable;
+        }
         );
 
         return $pipeline($this->passable);
@@ -209,7 +212,7 @@ class Pipeline
     /**
      * Get the final piece of the Closure onion.
      *
-     * @param  \Closure  $destination
+     * @param \Closure $destination
      * @return \Closure
      */
     protected function prepareDestination(Closure $destination)
@@ -241,11 +244,11 @@ class Pipeline
                     $parameters = [$passable, $stack];
                 } else {
                     list($name, $methodFromString, $parameters, $needContainer) = $this->parsePipeData($pipe);
-                    if($methodFromString) {
+                    if ($methodFromString) {
                         $method = $methodFromString;
                     }
 
-                    if (! $parameters) {
+                    if (!$parameters) {
                         $parameters = [];
                     }
 
@@ -294,17 +297,17 @@ class Pipeline
     /**
      * Parse full pipe string to get name and parameters.
      *
-     * @param  string $pipe
+     * @param string $pipe
      * @return array
      */
     protected function parsePipeData($pipe)
     {
         if (is_array($pipe)) {
-            if (! $pipe[0]) {
+            if (!$pipe[0]) {
                 throw  new Exception('I need to know name of service (class)');
             }
-            $name       = $pipe[0];
-            $method     = $pipe[1];
+            $name = $pipe[0];
+            $method = $pipe[1];
             $parameters = $pipe[2];
             $needContainer = $pipe[3];
         } else {
@@ -320,11 +323,10 @@ class Pipeline
     }
 
 
-
     protected function getPipeStageFromContainer($name)
     {
         /** @var ContainerInterface $container */
-        foreach($this->container as $container) {
+        foreach ($this->container as $container) {
             if ($container->has($name)) {
                 return $container->get($name);
             }

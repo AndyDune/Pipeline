@@ -2,7 +2,7 @@
 /**
  * This package provides a pipeline pattern implementation. It base on middleware approach.
  *
- * PHP version => 5.6
+ * PHP version >= 7.1
  *
  * @package andydune/pipeline
  * @link  https://github.com/AndyDune/Pipeline for the canonical source repository
