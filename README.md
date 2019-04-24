@@ -356,7 +356,7 @@ Package has not integrated exception catch support. It is simple for you  to inc
         return $next($context); // it will be never execute
     });
      
-    // This stage will never execute
+    // This stage will never be executed
     $pipeline->pipe(function ($context, $next) {
         $context['after_exception'] = 'ignored';
         return $next($context);
