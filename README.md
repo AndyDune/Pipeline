@@ -6,7 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/andydune/pipeline.svg?style=flat-square)](https://packagist.org/packages/andydune/pipeline)
 
 
-This package provides a pipeline pattern implementation. It base on middleware approach.
+This package provides a pipeline pattern implementation. It is based on middleware approach.
 
 
 Requirements
